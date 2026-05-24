@@ -373,7 +373,7 @@ def parse_ai_response(text: str):
 
 
 st.title("Mini Project B — Time-Series Forecasting Starter")
-st.caption("This starter prepares data and evidence only. Students add models, metrics, and dashboard improvements.")
+st.caption("Professional time-series forecasting app with modeling, metrics, dashboard visuals, exports, and AI grading evidence.")
 
 with st.sidebar:
     st.header("Student info")
@@ -869,7 +869,7 @@ st.markdown(
         line-height: 1.35;
     }
 
-    .banana-stage {
+    .energy-stage {
         background:
             radial-gradient(circle at 30% 20%, rgba(250,204,21,0.34), transparent 30%),
             linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.055));
@@ -931,16 +931,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-nano_banana_svg = """
-<div class="banana-stage svg-wrap">
-<svg viewBox="0 0 720 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nano banana 3D energy forecasting mascot">
+energy_command_svg = """
+<div class="energy-stage svg-wrap">
+<svg viewBox="0 0 720 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Realistic 3D energy forecasting command center">
   <defs>
     <radialGradient id="glow" cx="50%" cy="35%" r="65%">
       <stop offset="0%" stop-color="#fff7ad" stop-opacity="0.95"/>
       <stop offset="45%" stop-color="#facc15" stop-opacity="0.36"/>
       <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="banana" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="energyGlow" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fff7ad"/>
       <stop offset="40%" stop-color="#facc15"/>
       <stop offset="78%" stop-color="#eab308"/>
@@ -977,7 +977,7 @@ nano_banana_svg = """
     <text x="493" y="319" fill="#dbeafe" font-size="15" font-weight="700">Forecast Signal</text>
   </g>
   <g filter="url(#shadow)">
-    <path d="M333 82 C258 144 245 257 315 322 C367 372 457 341 491 272 C425 314 344 303 323 238 C305 183 331 126 392 73 C371 70 351 73 333 82Z" fill="url(#banana)" stroke="#fde68a" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M333 82 C258 144 245 257 315 322 C367 372 457 341 491 272 C425 314 344 303 323 238 C305 183 331 126 392 73 C371 70 351 73 333 82Z" fill="url(#energyGlow)" stroke="#fde68a" stroke-width="7" stroke-linejoin="round"/>
     <path d="M392 73 C410 67 426 67 443 75 C429 91 414 101 397 105 C392 96 389 85 392 73Z" fill="#854d0e"/>
     <path d="M312 321 C299 342 294 361 301 376 C324 368 342 356 356 338 C338 334 323 329 312 321Z" fill="#92400e"/>
     <ellipse cx="389" cy="193" rx="82" ry="111" fill="#fff7ad" opacity="0.18"/>
@@ -994,7 +994,7 @@ nano_banana_svg = """
     <circle cx="574" cy="142" r="9" fill="#34d399"/>
     <path d="M460 286 C497 314 535 326 579 322" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round"/>
     <circle cx="579" cy="322" r="9" fill="#facc15"/>
-    <text x="286" y="57" fill="#fef9c3" font-size="28" font-weight="950">Nano Banana AI</text>
+    <text x="286" y="57" fill="#fef9c3" font-size="28" font-weight="950">Energy Forecast AI</text>
     <text x="293" y="386" fill="#dbeafe" font-size="17" font-weight="800">Energy Forecasting Assistant</text>
   </g>
 </svg>
@@ -1004,7 +1004,7 @@ nano_banana_svg = """
 st.markdown(
     f"""
     <div class="neo-hero">
-        <div class="neo-title">🍌⚡ Nano Banana 3D Energy Forecasting Command Center</div>
+        <div class="neo-title">⚡ 3D Energy Forecasting Command Center</div>
         <div class="neo-subtitle">
             A polished, realistic infographic dashboard for <b>{project_title}</b>.
             It presents forecasting accuracy, demand behavior, model diagnostics, and business insights
@@ -1015,7 +1015,7 @@ st.markdown(
             <span class="pill">🤖 AI grading evidence</span>
             <span class="pill">📈 Forecast curves</span>
             <span class="pill">🧠 Model diagnostics</span>
-            <span class="pill">🍌 Nano Banana theme</span>
+            <span class="pill">⚡ 3D energy theme</span>
         </div>
     </div>
     """,
@@ -1074,7 +1074,7 @@ if results_df is not None and "best_predictions_df" in locals():
 
     hero_col1, hero_col2 = st.columns([1.15, 1.0])
     with hero_col1:
-        st.markdown(nano_banana_svg, unsafe_allow_html=True)
+        st.markdown(energy_command_svg, unsafe_allow_html=True)
 
     with hero_col2:
         st.markdown(
@@ -1084,7 +1084,7 @@ if results_df is not None and "best_predictions_df" in locals():
                     ⚙️ Forecasting Control Summary
                 </div>
                 <p style="color:#dbeafe; line-height:1.65;">
-                    Nano Banana AI monitors the electricity load curve, compares models, and highlights
+                    Energy Forecast AI monitors the electricity load curve, compares models, and highlights
                     operational risk periods where forecast errors become larger.
                 </p>
                 <div class="pill">Train/test split: chronological 80/20</div>
@@ -1347,7 +1347,7 @@ if results_df is not None and "best_predictions_df" in locals():
     st.markdown(
         """
         <div class="glass-card">
-            <div style="font-size:22px; font-weight:950; color:white;">🍌 Final Nano Banana Insight</div>
+            <div style="font-size:22px; font-weight:950; color:white;">⚡ Final Forecasting Insight</div>
             <p style="color:#dbeafe; line-height:1.65;">
                 The forecasting system is now styled as a realistic 3D infographic command center.
                 It supports technical review through metrics and diagnostics, while also giving a
@@ -1360,7 +1360,7 @@ if results_df is not None and "best_predictions_df" in locals():
     )
 
 else:
-    st.warning("Run the modeling section first so the Nano Banana 3D dashboard can display the results.")
+    st.warning("Run the modeling section first so the 3D energy dashboard can display the results.")
 
 st.header("7. Export submission files")
 missing_discussion = st.text_area(
@@ -1435,8 +1435,8 @@ with st.expander("Preview project_card.md"):
 
 st.header("8. AI grader (/80)")
 st.warning(
-    "Run the grader after adding your model, metrics table, dashboard visuals, and insights. "
-    "The starter alone will receive a low score because results_df is None by default."
+    "The modeling, metrics table, dashboard visuals, and insights are already included. "
+    "If OpenRouter returns 429, wait for the free-model quota to reset and retry."
 )
 
 st.markdown(
