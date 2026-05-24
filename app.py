@@ -813,6 +813,37 @@ st.markdown(
         font-size: 26px;
         margin-bottom: 6px;
     }
+
+    .stApp::before {
+        content: "⚡  📈  🏭  🌡️  🔋  🌍";
+        position: fixed;
+        top: 18px;
+        right: 24px;
+        font-size: 30px;
+        opacity: 0.10;
+        letter-spacing: 16px;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .energy-scene {
+        background: linear-gradient(135deg, rgba(15,23,42,0.92), rgba(30,64,175,0.72));
+        border: 1px solid rgba(255,255,255,0.16);
+        border-radius: 24px;
+        padding: 10px 14px 4px 14px;
+        margin-bottom: 20px;
+        box-shadow: 0 14px 36px rgba(0,0,0,0.30);
+        overflow: hidden;
+    }
+
+    .grader-help {
+        background: rgba(14,165,233,0.10);
+        border: 1px solid rgba(125,211,252,0.35);
+        border-radius: 18px;
+        padding: 16px 18px;
+        margin: 12px 0 18px 0;
+        color: #e0f2fe;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -832,12 +863,92 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+st.markdown(
+    """
+    <div class="energy-scene">
+        <svg viewBox="0 0 1200 260" width="100%" height="230" role="img" aria-label="Electricity demand forecasting control room illustration">
+            <defs>
+                <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#0f172a"/>
+                    <stop offset="55%" stop-color="#1d4ed8"/>
+                    <stop offset="100%" stop-color="#06b6d4"/>
+                </linearGradient>
+                <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#22c55e"/>
+                    <stop offset="50%" stop-color="#facc15"/>
+                    <stop offset="100%" stop-color="#38bdf8"/>
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <rect width="1200" height="260" rx="26" fill="url(#sky)" opacity="0.96"/>
+            <circle cx="990" cy="58" r="34" fill="#fde68a" opacity="0.95"/>
+            <circle cx="990" cy="58" r="55" fill="#fde68a" opacity="0.14"/>
+
+            <path d="M0 195 C130 150, 220 175, 330 135 C470 85, 560 160, 680 112 C815 55, 910 130, 1040 82 C1110 58, 1160 62, 1200 50 L1200 260 L0 260 Z"
+                  fill="#020617" opacity="0.42"/>
+            <path d="M0 218 C160 195, 255 225, 385 188 C520 148, 670 210, 805 165 C960 112, 1100 150, 1200 118 L1200 260 L0 260 Z"
+                  fill="#020617" opacity="0.64"/>
+
+            <g opacity="0.95">
+                <rect x="95" y="128" width="96" height="88" rx="4" fill="#111827"/>
+                <rect x="113" y="105" width="16" height="111" fill="#1f2937"/>
+                <rect x="154" y="88" width="16" height="128" fill="#1f2937"/>
+                <rect x="203" y="148" width="76" height="68" rx="4" fill="#111827"/>
+                <path d="M116 99 C142 70, 152 72, 164 44" stroke="#cbd5e1" stroke-width="6" fill="none" opacity="0.40"/>
+                <path d="M158 82 C182 52, 190 55, 204 25" stroke="#cbd5e1" stroke-width="6" fill="none" opacity="0.34"/>
+            </g>
+
+            <g stroke="#dbeafe" stroke-width="5" opacity="0.85">
+                <line x1="355" y1="214" x2="390" y2="118"/>
+                <line x1="425" y1="214" x2="390" y2="118"/>
+                <line x1="370" y1="158" x2="410" y2="158"/>
+                <line x1="360" y1="188" x2="420" y2="188"/>
+                <line x1="390" y1="118" x2="508" y2="158"/>
+                <line x1="508" y1="158" x2="626" y2="118"/>
+                <line x1="626" y1="118" x2="744" y2="158"/>
+            </g>
+
+            <g opacity="0.95">
+                <rect x="790" y="87" width="318" height="112" rx="18" fill="rgba(15,23,42,0.72)" stroke="rgba(255,255,255,0.22)"/>
+                <text x="815" y="122" fill="#e0f2fe" font-size="22" font-family="Arial" font-weight="700">Forecast Control Panel</text>
+                <path d="M820 169 L860 145 L900 154 L940 120 L980 136 L1020 100 L1060 116"
+                      stroke="url(#line)" stroke-width="7" fill="none" filter="url(#glow)" stroke-linecap="round"/>
+                <circle cx="940" cy="120" r="7" fill="#facc15"/>
+                <circle cx="1020" cy="100" r="7" fill="#38bdf8"/>
+                <text x="815" y="190" fill="#cbd5e1" font-size="15" font-family="Arial">Actual vs predicted demand • residuals • peak load</text>
+            </g>
+
+            <g opacity="0.92">
+                <rect x="470" y="195" width="52" height="23" rx="6" fill="#22c55e"/>
+                <rect x="532" y="180" width="52" height="38" rx="6" fill="#84cc16"/>
+                <rect x="594" y="160" width="52" height="58" rx="6" fill="#facc15"/>
+                <rect x="656" y="136" width="52" height="82" rx="6" fill="#fb923c"/>
+                <rect x="718" y="110" width="52" height="108" rx="6" fill="#38bdf8"/>
+            </g>
+
+            <text x="50" y="48" fill="#ffffff" font-size="30" font-family="Arial" font-weight="800">⚡ Energy Demand Forecasting</text>
+            <text x="50" y="78" fill="#bfdbfe" font-size="16" font-family="Arial">A professional dashboard for electricity load planning and model diagnostics</text>
+        </svg>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 dashboard_elements = []
 dashboard_notes = ""
 
 if isinstance(results_df, pd.DataFrame) and not results_df.empty and not best_predictions_df.empty:
     dashboard_elements = [
         "Premium gradient background and executive hero panel",
+        "Inline energy-control-room SVG picture with power plant, grid, KPI bars, and forecast curve",
         "KPI cards for best model, MAE, RMSE, MAPE, R2, average demand, and peak demand",
         "Actual vs predicted demand curve",
         "Forecast absolute error curve",
@@ -1225,6 +1336,28 @@ st.warning(
     "The starter alone will receive a low score because results_df is None by default."
 )
 
+st.markdown(
+    """
+    <div class="grader-help">
+        <b>OpenRouter 429 note:</b> A 429 error means the free OpenRouter model is temporarily rate-limited
+        or your API key has reached its request quota. This does not mean your project is wrong.
+        Download <b>submission.json</b>, keep your 80/80 evidence, and retry the grader after the quota resets
+        or with another valid OpenRouter key.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+with st.expander("Local evidence checklist before running the AI grader"):
+    checklist = {
+        "metrics_table_present": isinstance(results_df, pd.DataFrame) and not results_df.empty,
+        "time_based_split_evidence_present": bool(globals().get("time_split_evidence", "")),
+        "student_added_features_present": len(globals().get("student_added_features", [])) > 0,
+        "dashboard_plots_present": len(globals().get("dashboard_elements", [])) > 0,
+        "insights_present": bool((insights_text or "").strip()) or bool(globals().get("professional_summary", "")),
+    }
+    st.json(checklist)
+
 api_key = get_openrouter_api_key()
 if st.button("Run AI grader"):
     if not api_key:
@@ -1241,5 +1374,22 @@ if st.button("Run AI grader"):
                     st.subheader("Raw AI grader output")
                     st.code(raw_output)
                     st.error(parse_error)
+            except requests.exceptions.HTTPError as exc:
+                status_code = exc.response.status_code if exc.response is not None else "unknown"
+                if status_code == 429:
+                    st.error("AI grader rate limit: OpenRouter returned 429 Too Many Requests.")
+                    st.info(
+                        "Your app and submission evidence can still be correct. "
+                        "Download submission.json, keep it for submission, and retry the AI grader after the free-model quota resets "
+                        "or use another valid OpenRouter API key."
+                    )
+                    with st.expander("Show current submission evidence"):
+                        st.json(submission)
+                else:
+                    st.error(f"AI grader failed with HTTP status {status_code}: {exc}")
+            except requests.exceptions.Timeout:
+                st.error("AI grader request timed out. Retry once, or download submission.json and use it as evidence.")
+            except requests.exceptions.RequestException as exc:
+                st.error(f"Network/API error while calling AI grader: {exc}")
             except Exception as exc:
                 st.error(f"AI grader failed: {exc}")
