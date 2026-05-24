@@ -703,154 +703,450 @@ st.code(
 )
 
 # STUDENT ADDITIONS — DASHBOARD START
-st.subheader("Professional forecasting dashboard")
+# -----------------------------
+# PROFESSIONAL DASHBOARD + FANTASTIC BACKGROUND
+# -----------------------------
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background:
+            radial-gradient(circle at top left, rgba(59,130,246,0.24), transparent 28%),
+            radial-gradient(circle at top right, rgba(20,184,166,0.20), transparent 26%),
+            radial-gradient(circle at bottom left, rgba(245,158,11,0.16), transparent 25%),
+            linear-gradient(135deg, #07111f 0%, #0f172a 45%, #111827 100%);
+        color: #f8fafc;
+    }
+
+    .block-container {
+        padding-top: 1.4rem;
+        padding-bottom: 2.2rem;
+        max-width: 1450px;
+    }
+
+    h1, h2, h3 {
+        color: #f8fafc;
+    }
+
+    div[data-testid="stMetric"] {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.14);
+        padding: 15px;
+        border-radius: 18px;
+        box-shadow: 0 10px 28px rgba(0,0,0,0.22);
+        backdrop-filter: blur(12px);
+    }
+
+    .hero-box {
+        background:
+            linear-gradient(135deg, rgba(37,99,235,0.88), rgba(8,145,178,0.75)),
+            rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.16);
+        border-radius: 26px;
+        padding: 30px 30px;
+        box-shadow: 0 14px 36px rgba(0,0,0,0.30);
+        margin-bottom: 22px;
+    }
+
+    .hero-title {
+        font-size: 34px;
+        font-weight: 850;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+        color: #e2e8f0;
+        line-height: 1.65;
+    }
+
+    .glass-card {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.13);
+        border-radius: 20px;
+        padding: 20px 22px;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.24);
+        backdrop-filter: blur(12px);
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        font-size: 23px;
+        font-weight: 800;
+        color: #f8fafc;
+        margin-top: 10px;
+        margin-bottom: 12px;
+    }
+
+    .mini-label {
+        color: #bae6fd;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    .small-note {
+        color: #cbd5e1;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .energy-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .energy-tile {
+        background: rgba(15,23,42,0.72);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 18px;
+        padding: 16px;
+        min-height: 95px;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.22);
+    }
+
+    .energy-icon {
+        font-size: 26px;
+        margin-bottom: 6px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    f"""
+    <div class="hero-box">
+        <div class="hero-title">⚡ Professional Electricity Demand Forecasting Dashboard</div>
+        <div class="hero-subtitle">
+            This upgraded dashboard presents <b>{project_title}</b> as a real energy-control-room
+            forecasting product. It combines model evaluation, forecast curves, residual diagnostics,
+            demand patterns, feature importance, and business interpretation in one polished view.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 dashboard_elements = []
 dashboard_notes = ""
 
-if isinstance(results_df, pd.DataFrame) and not results_df.empty:
+if isinstance(results_df, pd.DataFrame) and not results_df.empty and not best_predictions_df.empty:
     dashboard_elements = [
-        "KPI cards for best model, MAE, RMSE, and MAPE",
+        "Premium gradient background and executive hero panel",
+        "KPI cards for best model, MAE, RMSE, MAPE, R2, average demand, and peak demand",
         "Actual vs predicted demand curve",
-        "Forecast error curve",
-        "Model comparison chart",
-        "Average daily demand pattern",
-        "Residual distribution",
+        "Forecast absolute error curve",
         "Actual vs predicted scatter plot",
+        "Residual distribution and residuals vs predicted plot",
+        "Absolute percentage error distribution",
+        "Hourly, weekday, and monthly demand pattern curves",
+        "Model comparison chart",
         "Feature importance chart",
         "Largest forecast errors table",
-        "Business interpretation and operational recommendations",
+        "Professional business interpretation cards",
     ]
     dashboard_notes = (
-        "Dashboard includes KPI cards, actual-vs-predicted curve, residual/error analysis, "
-        "model comparison, feature importance, daily demand profile, largest-error table, "
-        "and written business interpretation."
+        "The dashboard includes professional energy-demand visuals: actual vs predicted curve, "
+        "forecast error diagnostics, residual analysis, demand pattern charts, model comparison, "
+        "feature importance, KPI cards, largest-error table, and business interpretation."
     )
+
+    dash_df = best_predictions_df.copy()
+    dash_df["residual"] = dash_df["actual"] - dash_df["prediction"]
+    dash_df["abs_pct_error"] = np.where(
+        dash_df["actual"] != 0,
+        np.abs(dash_df["residual"]) / np.abs(dash_df["actual"]) * 100,
+        np.nan,
+    )
+
+    mean_actual = float(dash_df["actual"].mean())
+    mean_pred = float(dash_df["prediction"].mean())
+    mean_error = float(dash_df["absolute_error"].mean())
+    peak_actual = float(dash_df["actual"].max())
+    peak_time = dash_df.loc[dash_df["actual"].idxmax(), timestamp_col]
 
     st.markdown(
         """
-        <div style="
-            padding: 24px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #0f172a, #1d4ed8, #06b6d4);
-            color: white;
-            margin-bottom: 18px;
-        ">
-            <h3 style="margin-bottom: 8px;">Electricity Demand Forecasting Control Room</h3>
-            <p style="font-size: 16px; margin-bottom: 0;">
-                This dashboard supports realistic energy-planning decisions by comparing demand forecasts,
-                detecting high-error periods, and showing daily consumption behavior.
-            </p>
+        <div class="energy-strip">
+            <div class="energy-tile"><div class="energy-icon">🏭</div><div class="mini-label">Power system</div><div class="small-note">Forecast future load for planning and reliability.</div></div>
+            <div class="energy-tile"><div class="energy-icon">🌡️</div><div class="mini-label">Demand drivers</div><div class="small-note">Calendar, lags, rolling patterns, and temperature.</div></div>
+            <div class="energy-tile"><div class="energy-icon">📈</div><div class="mini-label">Model evidence</div><div class="small-note">Time-based split, metrics, and predictions.</div></div>
+            <div class="energy-tile"><div class="energy-icon">🎯</div><div class="mini-label">Decision value</div><div class="small-note">Support peak planning and operational control.</div></div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    st.image(
-        "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1400&q=80",
-        caption="Real-world electricity grid context for demand forecasting.",
-        use_container_width=True,
+    st.markdown('<div class="section-title">Executive KPI Summary</div>', unsafe_allow_html=True)
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
+    c1.metric("Best Model", best_model_name)
+    c2.metric("MAE", f"{best_mae:,.2f}")
+    c3.metric("RMSE", f"{best_rmse:,.2f}")
+    c4.metric("MAPE", f"{best_mape:.2f}%")
+    c5.metric("R²", f"{best_r2:.3f}")
+    c6.metric("Peak Demand", f"{peak_actual:,.2f}")
+
+    st.markdown(
+        f"""
+        <div class="glass-card">
+            <b>Executive interpretation:</b> The best-performing model is <b>{best_model_name}</b>.
+            It achieved <b>MAE = {best_mae:,.2f}</b>, <b>RMSE = {best_rmse:,.2f}</b>,
+            <b>MAPE = {best_mape:.2f}%</b>, and <b>R² = {best_r2:.4f}</b>.
+            The maximum demand in the test period was <b>{peak_actual:,.2f}</b> at <b>{peak_time}</b>.
+            This evidence supports practical electricity planning because the model is tested on future
+            unseen records rather than random samples.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    plot_limit = st.slider(
-        "Recent test points shown in forecast curves",
-        min_value=50,
-        max_value=max(50, min(1000, len(best_predictions_df))),
-        value=min(300, len(best_predictions_df)),
-        step=50,
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(
+        [
+            "Executive Overview",
+            "Forecast Curves",
+            "Diagnostics",
+            "Demand Patterns",
+            "Models & Features",
+        ]
     )
 
-    curve_df = best_predictions_df.tail(plot_limit)
+    plot_max = int(min(1000, len(dash_df)))
+    if plot_max >= 72:
+        recent_points = st.sidebar.slider(
+            "Dashboard points displayed",
+            min_value=72,
+            max_value=plot_max,
+            value=min(336, plot_max),
+            step=24,
+        )
+    else:
+        recent_points = plot_max
+    recent_df = dash_df.tail(recent_points)
 
-    st.markdown("### Actual vs predicted demand curve")
-    fig1, ax1 = plt.subplots(figsize=(12, 5))
-    ax1.plot(curve_df[timestamp_col], curve_df["actual"], label="Actual demand")
-    ax1.plot(curve_df[timestamp_col], curve_df["prediction"], label=f"Predicted demand — {best_model_name}")
-    ax1.set_title("Actual vs Predicted Electricity Demand")
-    ax1.set_xlabel("Time")
-    ax1.set_ylabel(target_col)
-    ax1.legend()
-    plt.xticks(rotation=30)
-    st.pyplot(fig1)
+    with tab1:
+        st.markdown('<div class="section-title">Forecast performance overview</div>', unsafe_allow_html=True)
+        left, right = st.columns([2.15, 1])
 
-    st.markdown("### Forecast error curve")
-    fig2, ax2 = plt.subplots(figsize=(12, 4))
-    ax2.plot(curve_df[timestamp_col], curve_df["absolute_error"], label="Absolute error")
-    ax2.set_title("Absolute Forecast Error Over Time")
-    ax2.set_xlabel("Time")
-    ax2.set_ylabel("Absolute error")
-    ax2.legend()
-    plt.xticks(rotation=30)
-    st.pyplot(fig2)
+        with left:
+            fig1, ax1 = plt.subplots(figsize=(12, 5))
+            ax1.plot(recent_df[timestamp_col], recent_df["actual"], label="Actual Demand", linewidth=2)
+            ax1.plot(recent_df[timestamp_col], recent_df["prediction"], label=f"Predicted Demand — {best_model_name}", linewidth=2)
+            ax1.set_title("Actual vs Predicted Electricity Demand")
+            ax1.set_xlabel("Time")
+            ax1.set_ylabel(target_col)
+            ax1.legend()
+            ax1.grid(alpha=0.28)
+            plt.xticks(rotation=30)
+            st.pyplot(fig1)
 
-    st.markdown("### Model comparison")
-    metric_choice = st.selectbox("Choose model comparison metric", ["MAE", "RMSE", "MAPE", "R2"], index=1)
-    fig3, ax3 = plt.subplots(figsize=(9, 4))
-    ax3.bar(results_df["model"], results_df[metric_choice])
-    ax3.set_title(f"Model Comparison by {metric_choice}")
-    ax3.set_xlabel("Model")
-    ax3.set_ylabel(metric_choice)
-    plt.xticks(rotation=20)
-    st.pyplot(fig3)
+        with right:
+            st.markdown(
+                f"""
+                <div class="glass-card">
+                    <b>Test Period Summary</b><br><br>
+                    • Train period: <b>{train_period}</b><br>
+                    • Test period: <b>{test_period}</b><br>
+                    • Train rows: <b>{train_rows:,}</b><br>
+                    • Test rows: <b>{test_rows:,}</b><br>
+                    • Avg actual demand: <b>{mean_actual:,.2f}</b><br>
+                    • Avg predicted demand: <b>{mean_pred:,.2f}</b><br>
+                    • Avg absolute error: <b>{mean_error:,.2f}</b>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-    st.markdown("### Average daily demand pattern")
-    daily_pattern = prepared_df.copy()
-    daily_pattern["hour_of_day"] = daily_pattern[timestamp_col].dt.hour
-    hourly_avg = daily_pattern.groupby("hour_of_day")[target_col].mean().reset_index()
-    fig4, ax4 = plt.subplots(figsize=(9, 4))
-    ax4.plot(hourly_avg["hour_of_day"], hourly_avg[target_col], marker="o")
-    ax4.set_title("Average Electricity Demand by Hour of Day")
-    ax4.set_xlabel("Hour of day")
-    ax4.set_ylabel(f"Average {target_col}")
-    ax4.set_xticks(range(0, 24))
-    st.pyplot(fig4)
+        st.markdown(
+            """
+            <div class="glass-card">
+                <b>Professional reading:</b> A reliable forecasting model should follow both the
+                daily rhythm and the peak-load periods. The closer the predicted curve is to the
+                actual curve, the stronger the model is for operational planning. Larger gaps point
+                to periods that may require more features, such as weather, holidays, or demand events.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    st.markdown("### Residual distribution")
-    fig5, ax5 = plt.subplots(figsize=(9, 4))
-    ax5.hist(best_predictions_df["residual"], bins=35)
-    ax5.set_title("Residual Distribution for Best Model")
-    ax5.set_xlabel("Actual - Predicted")
-    ax5.set_ylabel("Frequency")
-    st.pyplot(fig5)
+    with tab2:
+        st.markdown('<div class="section-title">Forecast curves and prediction accuracy</div>', unsafe_allow_html=True)
 
-    st.markdown("### Actual vs predicted scatter plot")
-    fig6, ax6 = plt.subplots(figsize=(6, 6))
-    ax6.scatter(best_predictions_df["actual"], best_predictions_df["prediction"], alpha=0.45)
-    min_val = min(best_predictions_df["actual"].min(), best_predictions_df["prediction"].min())
-    max_val = max(best_predictions_df["actual"].max(), best_predictions_df["prediction"].max())
-    ax6.plot([min_val, max_val], [min_val, max_val], linestyle="--", label="Perfect prediction line")
-    ax6.set_title("Actual vs Predicted Scatter")
-    ax6.set_xlabel("Actual")
-    ax6.set_ylabel("Predicted")
-    ax6.legend()
-    st.pyplot(fig6)
-
-    if isinstance(feature_importance_df, pd.DataFrame) and not feature_importance_df.empty:
-        st.markdown("### Top feature importance")
-        top_features = feature_importance_df.head(10)
-        fig7, ax7 = plt.subplots(figsize=(10, 4))
-        ax7.bar(top_features["feature"], top_features["importance"])
-        ax7.set_title("Top Random Forest Feature Importances")
-        ax7.set_xlabel("Feature")
-        ax7.set_ylabel("Importance")
+        fig2, ax2 = plt.subplots(figsize=(12, 4.6))
+        ax2.plot(recent_df[timestamp_col], recent_df["absolute_error"], linewidth=2)
+        ax2.set_title("Absolute Forecast Error Over Time")
+        ax2.set_xlabel("Time")
+        ax2.set_ylabel("Absolute Error")
+        ax2.grid(alpha=0.28)
         plt.xticks(rotation=30)
-        st.pyplot(fig7)
+        st.pyplot(fig2)
 
-    st.markdown("### Largest forecast errors")
-    worst_errors = best_predictions_df.sort_values("absolute_error", ascending=False).head(10)
-    st.dataframe(worst_errors[[timestamp_col, "actual", "prediction", "residual", "absolute_error"]], use_container_width=True)
+        colA, colB = st.columns(2)
+        with colA:
+            fig3, ax3 = plt.subplots(figsize=(6.4, 5))
+            ax3.scatter(dash_df["actual"], dash_df["prediction"], alpha=0.55)
+            min_val = min(float(dash_df["actual"].min()), float(dash_df["prediction"].min()))
+            max_val = max(float(dash_df["actual"].max()), float(dash_df["prediction"].max()))
+            ax3.plot([min_val, max_val], [min_val, max_val], linestyle="--", linewidth=2)
+            ax3.set_title("Actual vs Predicted Scatter")
+            ax3.set_xlabel("Actual Demand")
+            ax3.set_ylabel("Predicted Demand")
+            ax3.grid(alpha=0.28)
+            st.pyplot(fig3)
 
-    st.markdown("### Interpretation and business implications")
-    st.write(professional_summary)
-    st.write(
-        "Operationally, lower forecast error helps electricity planners schedule generation, reduce reserve costs, "
-        "and prepare for high-demand periods. The largest-error table identifies times that may need investigation, "
-        "such as unusual weather, demand spikes, or special operating conditions."
+        with colB:
+            fig4, ax4 = plt.subplots(figsize=(6.4, 5))
+            ax4.hist(dash_df["abs_pct_error"].dropna(), bins=30)
+            ax4.set_title("Absolute Percentage Error Distribution")
+            ax4.set_xlabel("Absolute Percentage Error (%)")
+            ax4.set_ylabel("Frequency")
+            ax4.grid(alpha=0.28)
+            st.pyplot(fig4)
+
+    with tab3:
+        st.markdown('<div class="section-title">Residual diagnostics</div>', unsafe_allow_html=True)
+        colC, colD = st.columns(2)
+
+        with colC:
+            fig5, ax5 = plt.subplots(figsize=(6.4, 4.7))
+            ax5.hist(dash_df["residual"], bins=30)
+            ax5.set_title("Residual Distribution")
+            ax5.set_xlabel("Residual = Actual - Prediction")
+            ax5.set_ylabel("Frequency")
+            ax5.grid(alpha=0.28)
+            st.pyplot(fig5)
+
+        with colD:
+            fig6, ax6 = plt.subplots(figsize=(6.4, 4.7))
+            ax6.scatter(dash_df["prediction"], dash_df["residual"], alpha=0.55)
+            ax6.axhline(0, linestyle="--", linewidth=2)
+            ax6.set_title("Residuals vs Predicted Demand")
+            ax6.set_xlabel("Predicted Demand")
+            ax6.set_ylabel("Residual")
+            ax6.grid(alpha=0.28)
+            st.pyplot(fig6)
+
+        st.markdown("### Largest forecast errors")
+        top_errors = dash_df.sort_values("absolute_error", ascending=False).head(10)
+        st.dataframe(
+            top_errors[[timestamp_col, "actual", "prediction", "absolute_error", "abs_pct_error"]],
+            use_container_width=True,
+        )
+
+        st.markdown(
+            """
+            <div class="glass-card">
+                <b>Diagnostic interpretation:</b> Residuals should ideally be centered around zero.
+                If errors are very large during certain hours or months, the model may need additional
+                external drivers such as special events, holiday demand, or more detailed weather variables.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with tab4:
+        st.markdown('<div class="section-title">Electricity demand patterns</div>', unsafe_allow_html=True)
+
+        pattern_df = prepared_df.copy()
+        pattern_df["hour_of_day"] = pattern_df[timestamp_col].dt.hour
+        pattern_df["day_name"] = pattern_df[timestamp_col].dt.day_name()
+        pattern_df["month_num"] = pattern_df[timestamp_col].dt.month
+
+        hourly_profile = pattern_df.groupby("hour_of_day")[target_col].mean().reset_index()
+        weekday_profile = pattern_df.groupby("day_name")[target_col].mean().reset_index()
+        month_profile = pattern_df.groupby("month_num")[target_col].mean().reset_index()
+
+        weekday_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        weekday_profile["day_name"] = pd.Categorical(weekday_profile["day_name"], categories=weekday_order, ordered=True)
+        weekday_profile = weekday_profile.sort_values("day_name")
+
+        colE, colF = st.columns(2)
+        with colE:
+            fig7, ax7 = plt.subplots(figsize=(6.6, 4.6))
+            ax7.plot(hourly_profile["hour_of_day"], hourly_profile[target_col], marker="o", linewidth=2)
+            ax7.set_title("Average Demand by Hour of Day")
+            ax7.set_xlabel("Hour")
+            ax7.set_ylabel(f"Average {target_col}")
+            ax7.set_xticks(range(0, 24, 2))
+            ax7.grid(alpha=0.28)
+            st.pyplot(fig7)
+
+        with colF:
+            fig8, ax8 = plt.subplots(figsize=(6.6, 4.6))
+            ax8.bar(weekday_profile["day_name"].astype(str), weekday_profile[target_col])
+            ax8.set_title("Average Demand by Day of Week")
+            ax8.set_xlabel("Day")
+            ax8.set_ylabel(f"Average {target_col}")
+            ax8.grid(alpha=0.28)
+            plt.xticks(rotation=30)
+            st.pyplot(fig8)
+
+        fig9, ax9 = plt.subplots(figsize=(10.5, 4.6))
+        ax9.plot(month_profile["month_num"], month_profile[target_col], marker="o", linewidth=2)
+        ax9.set_title("Average Demand by Month")
+        ax9.set_xlabel("Month")
+        ax9.set_ylabel(f"Average {target_col}")
+        ax9.set_xticks(range(1, 13))
+        ax9.grid(alpha=0.28)
+        st.pyplot(fig9)
+
+    with tab5:
+        st.markdown('<div class="section-title">Model comparison and feature importance</div>', unsafe_allow_html=True)
+        colG, colH = st.columns(2)
+
+        with colG:
+            metric_choice = st.selectbox("Choose model comparison metric", ["RMSE", "MAE", "MAPE", "R2"])
+            fig10, ax10 = plt.subplots(figsize=(6.8, 4.8))
+            ax10.bar(results_df["model"], results_df[metric_choice])
+            ax10.set_title(f"Model Comparison by {metric_choice}")
+            ax10.set_xlabel("Model")
+            ax10.set_ylabel(metric_choice)
+            ax10.grid(alpha=0.28)
+            plt.xticks(rotation=20)
+            st.pyplot(fig10)
+
+        with colH:
+            if isinstance(feature_importance_df, pd.DataFrame) and not feature_importance_df.empty:
+                importance_plot_df = feature_importance_df.head(12).sort_values("importance")
+                fig11, ax11 = plt.subplots(figsize=(6.8, 4.8))
+                ax11.barh(importance_plot_df["feature"], importance_plot_df["importance"])
+                ax11.set_title("Top Feature Importances")
+                ax11.set_xlabel("Importance")
+                ax11.set_ylabel("Feature")
+                ax11.grid(alpha=0.28)
+                st.pyplot(fig11)
+            else:
+                st.info("Feature importance is not available for the current best model settings.")
+
+        st.markdown("### Metrics table")
+        st.dataframe(results_df, use_container_width=True)
+
+        st.markdown("### Student-added features")
+        st.dataframe(pd.DataFrame({"student_added_feature": student_added_features}), use_container_width=True)
+
+    st.markdown(
+        """
+        <div class="glass-card">
+            <b>Business insight:</b>
+            This dashboard supports energy management by showing when demand peaks occur, how accurately
+            the model predicts future load, and where forecasting errors are concentrated. These insights
+            can support generation scheduling, reserve planning, cost control, and preparation for peak
+            electricity demand periods.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
+
 else:
-    dashboard_notes = "Dashboard could not run because model metrics were not created."
-    st.warning("Model results are not available. Keep no resampling selected and run the app again to create dashboard visuals.")
-# STUDENT ADDITIONS — DASHBOARD END
+    dashboard_elements = []
+    dashboard_notes = "Dashboard could not render because model results are not available."
+    st.warning("Run the modeling section first so the professional dashboard can display the results.")
+
+
 
 st.header("7. Export submission files")
 missing_discussion = st.text_area(
